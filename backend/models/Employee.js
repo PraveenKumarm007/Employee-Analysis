@@ -1,0 +1,45 @@
+const mongoose = require('mongoose');
+
+const employeeSchema = new mongoose.Schema({
+  employeeId: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  department: {
+    type: String,
+    required: true
+  },
+  position: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: String,
+    enum: ['Admin', 'Employee'],
+    default: 'Employee'
+  },
+  password: {
+    type: String,
+    required: true
+  }
+}, { timestamps: true });
+
+const bcrypt = require('bcryptjs');
+
+employeeSchema.pre('save', async function() {
+  if (!this.isModified('password')) return;
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+module.exports = mongoose.model('Employee', employeeSchema);
