@@ -6,7 +6,7 @@ import { useSocket } from '../hooks/useSocket';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip as RechartsTooltip, ResponsiveContainer,
-  RadialBarChart, RadialBar, PolarAngleAxis
+  RadialBarChart, RadialBar, PolarAngleAxis, Cell
 } from 'recharts';
 
 const ScoreCircle = ({ score, category }) => {
@@ -180,7 +180,7 @@ const EmployeeReport = () => {
                 <RechartsTooltip formatter={(v) => `${v}/100`} />
                 <Bar dataKey="score" radius={[4, 4, 0, 0]}>
                   {chartData.map((entry, i) => (
-                    <rect key={i} fill={entry.fill} />
+                    <Cell key={i} fill={entry.fill} />
                   ))}
                 </Bar>
               </BarChart>

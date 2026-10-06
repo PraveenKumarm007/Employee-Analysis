@@ -46,13 +46,19 @@ io.on('connection', (socket) => {
   });
 });
 
-mongoose.connect(process.env.MONGO_URI)
-.then(() => {
-  console.log('Connected to MongoDB');
+const startServer = () => {
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
+};
+
+mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mern-app')
+.then(() => {
+  console.log('Connected to MongoDB');
+  startServer();
 })
 .catch((err) => {
-  console.error('MongoDB connection error:', err);
+  console.error('MongoDB connection error:', err.message);
+  console.log('Starting HTTP server without active MongoDB connection...');
+  startServer();
 });

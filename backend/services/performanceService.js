@@ -9,7 +9,8 @@ const calculateEmployeePerformance = async (employeeId) => {
   try {
     const employee = await Employee.findById(employeeId);
     if (!employee) {
-      throw new Error('Employee not found');
+      console.warn(`[Performance] Employee ${employeeId} not found — returning empty performance.`);
+      return null;
     }
 
     // Fetch all records

@@ -44,8 +44,12 @@ const MyPerformance = () => {
       });
       setError(null);
     } catch (err) {
-      console.error('Error loading performance:', err);
-      setError('Failed to load your performance data.');
+      if (err.response?.status === 404) {
+        setError('no-data');
+      } else {
+        console.error('Error loading performance:', err);
+        setError('Failed to load your performance data.');
+      }
     } finally {
       setLoading(false);
     }
@@ -63,12 +67,23 @@ const MyPerformance = () => {
     </div>
   );
 
-  if (error || !report) return (
-    <div style={{ textAlign: 'center', padding: 40 }}>
-      <div style={{ fontSize: '2rem' }}>❌</div>
-      <p style={{ color: '#ef4444' }}>{error || 'No performance data found.'}</p>
+  if (error === 'no-data' || !report) return (
+    <div style={{ textAlign: 'center', padding: 60 }}>
+      <div style={{ fontSize: '3rem', marginBottom: 16 }}>📊</div>
+      <h2 style={{ color: '#1f2937', marginBottom: 8 }}>No Performance Data Yet</h2>
+      <p style={{ color: '#6b7280', maxWidth: 400, margin: '0 auto' }}>
+        Your performance data will appear here once an administrator has added your KPI, project, attendance, training, or appraisal records.
+      </p>
     </div>
   );
+
+  if (error) return (
+    <div style={{ textAlign: 'center', padding: 40 }}>
+      <div style={{ fontSize: '2rem' }}>❌</div>
+      <p style={{ color: '#ef4444' }}>{error}</p>
+    </div>
+  );
+
 
   const { performance, kpis, projects, attendance, training, appraisals } = report;
 

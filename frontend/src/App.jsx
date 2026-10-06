@@ -30,8 +30,22 @@ function App() {
       <ToastProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            {/* Standard User Auth Route */}
+            <Route path="/login" element={<Login initialMode="login" />} />
+
+            {/* Dedicated Separate Admin Auth Route */}
+            <Route path="/admin/login" element={<Login initialMode="admin" />} />
+
             <Route path="/unauthorized" element={<Unauthorized />} />
+
+            {/* Dedicated Separate Admin Portal Endpoint */}
+            <Route path="/admin" element={<ProtectedRoute allowedRoles={['Admin']}><DashboardLayout /></ProtectedRoute>}>
+              <Route index element={<Dashboard />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="users" element={<Employees />} />
+            </Route>
+
+            {/* Main Application Shell */}
             <Route path="/" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<HomeRoute />} />
               <Route path="employees" element={<ProtectedRoute allowedRoles={['Admin']}><Employees /></ProtectedRoute>} />

@@ -15,6 +15,10 @@ const employeeSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  phone: {
+    type: String,
+    default: ''
+  },
   department: {
     type: String,
     required: true
@@ -27,6 +31,11 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     enum: ['Admin', 'Employee'],
     default: 'Employee'
+  },
+  status: {
+    type: String,
+    enum: ['Active', 'Inactive'],
+    default: 'Active'
   },
   password: {
     type: String,

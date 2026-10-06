@@ -34,10 +34,11 @@ const MyProfile = () => {
     </div>
   );
 
-  const perf = profile.performance;
+  const perf = profile.performance || null;
   const catColor = perf?.category === 'Excellent' ? '#10b981'
     : perf?.category === 'Good' ? '#3b82f6'
     : perf?.category === 'Average' ? '#f59e0b' : '#ef4444';
+
 
   return (
     <div style={{ maxWidth: 800, margin: '0 auto' }}>

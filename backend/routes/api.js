@@ -10,8 +10,14 @@ const performanceController = require('../controllers/performanceController');
 const dashboardController = require('../controllers/dashboardController');
 const authController = require('../controllers/authController');
 
-// Auth Route
+// Auth Routes
 router.post('/login', authController.login);
+router.post('/admin/login', authController.adminLogin);
+router.post('/register', authController.register);
+router.post('/google-auth', authController.googleAuth);
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/verify-otp', authController.verifyOtp);
+router.post('/reset-password', authController.resetPassword);
 
 // Employee Routes
 router.get('/employees', employeeController.getAllEmployees);

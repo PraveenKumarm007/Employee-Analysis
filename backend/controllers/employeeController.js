@@ -3,15 +3,15 @@ const { calculateEmployeePerformance } = require('../services/performanceService
 
 exports.getAllEmployees = async (req, res) => {
   try {
-    const employees = await Employee.find();
-    // Also calculate performance for each
+    const employees = await Employee.find().select('-password');
     const employeesWithPerformance = await Promise.all(
       employees.map(async (emp) => {
-        const perf = await calculateEmployeePerformance(emp._id);
-        return {
-          ...emp.toObject(),
-          performance: perf
-        };
+        try {
+          const perf = await calculateEmployeePerformance(emp._id);
+          return { ...emp.toObject(), performance: perf };
+        } catch {
+          return { ...emp.toObject(), performance: null };
+        }
       })
     );
     res.json(employeesWithPerformance);
@@ -22,9 +22,14 @@ exports.getAllEmployees = async (req, res) => {
 
 exports.getEmployeeById = async (req, res) => {
   try {
-    const employee = await Employee.findById(req.params.id);
+    const employee = await Employee.findById(req.params.id).select('-password');
     if (!employee) return res.status(404).json({ message: 'Employee not found' });
-    const performance = await calculateEmployeePerformance(employee._id);
+    let performance = null;
+    try {
+      performance = await calculateEmployeePerformance(employee._id);
+    } catch {
+      // Performance data unavailable – return employee without it
+    }
     res.json({ ...employee.toObject(), performance });
   } catch (error) {
     res.status(500).json({ message: error.message });
